@@ -19,6 +19,7 @@ module {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   public type State = {
+    // this is the data you previously had as stable variables inside your actor class
     var admin: Principal;
     var teachers: [Teacher];
     var students: [Student];

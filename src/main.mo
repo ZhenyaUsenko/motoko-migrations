@@ -6,6 +6,8 @@ import MigrationTypes "./migrations/types";
 shared deployer actor class MotokoMigrations() {
   let StateTypes = MigrationTypes.Current;
 
+  // you will have only one stable variable
+  // move all your stable variable declarations to "migrations/001-initial/types.mo -> State"
   stable var migrationState: MigrationTypes.State = #state000(#data);
 
   // do not forget to change #state002 when you are ading a new migration
