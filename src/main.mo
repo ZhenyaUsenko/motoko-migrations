@@ -10,11 +10,11 @@ shared deployer actor class MotokoMigrations() {
   // move all your stable variable declarations to "migrations/001-initial/types.mo -> State"
   stable var migrationState: MigrationTypes.State = #state000(#data);
 
-  // do not forget to change #state002 when you are ading a new migration
+  // do not forget to change #state002 when you are adding a new migration
   // if you use one previus states in place of #state002 it will run downgrade methods instead
   migrationState := Migrations.migrate(migrationState, #state002(#id), { deployer = deployer.caller });
 
-  // do not forget to change #state002 when you are ading a new migration
+  // do not forget to change #state002 when you are adding a new migration
   let #state002(#data(state)) = migrationState;
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
