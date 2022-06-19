@@ -1,0 +1,8 @@
+{
+  "canisters": {
+    "motoko_migrations": {
+      "main": "src/main.mo",
+      "type": "motoko"
+    }
+  }
+}
