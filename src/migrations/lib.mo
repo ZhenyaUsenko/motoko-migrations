@@ -1,35 +1,31 @@
-import Migration001 "./001-initial";
-import Migration002 "./002-add-full-name";
+import V0_1_0 "./00-01-00-initial";
+import V0_2_0 "./00-02-00-add-full-name";
 import MigrationTypes "./types";
 
 module {
   let upgrades = [
-    Migration001.upgrade,
-    Migration002.upgrade,
+    V0_1_0.upgrade,
+    V0_2_0.upgrade,
     // do not forget to add your new migration upgrade method here
   ];
 
   let downgrades = [
-    Migration001.downgrade,
-    Migration002.downgrade,
+    V0_1_0.downgrade,
+    V0_2_0.downgrade,
     // do not forget to add your new migration downgrade method here
   ];
 
   func getMigrationId(state: MigrationTypes.State): Nat {
     return switch (state) {
-      case (#state000(_)) 0;
-      case (#state001(_)) 1;
-      case (#state002(_)) 2;
+      case (#v0_0_0(_)) 0;
+      case (#v0_1_0(_)) 1;
+      case (#v0_2_0(_)) 2;
       // do not forget to add your new migration id here
       // should be increased by 1 as it will be later used as an index to get upgrade/downgrade methods
     };
   };
 
-  public func migrate(
-    prevState: MigrationTypes.State, 
-    nextState: MigrationTypes.State, 
-    args: MigrationTypes.Args
-  ): MigrationTypes.State {
+  public func migrate(prevState: MigrationTypes.State, nextState: MigrationTypes.State, args: MigrationTypes.Args): MigrationTypes.State {
     var state = prevState;
     var migrationId = getMigrationId(prevState);
 

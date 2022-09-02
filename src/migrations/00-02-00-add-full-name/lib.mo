@@ -1,15 +1,16 @@
 import Array "mo:base/Array";
-import Types001 "../001-initial/types";
-import Types002 "./types";
+import Debug "mo:base/Debug";
 import MigrationTypes "../types";
+import V0_1_0 "../00-01-00-initial/types";
+import V0_2_0 "./types";
 
 module {
-  public func upgrade(prevMigrationState: MigrationTypes.State, args: MigrationTypes.Args): MigrationTypes.State {
+  public func upgrade(migrationState: MigrationTypes.State, args: MigrationTypes.Args): MigrationTypes.State {
     // access previous state
-    let #state001(#data(prevState)) = prevMigrationState;
+    let state = switch (migrationState) { case (#v0_1_0(#data(state))) state; case (_) Debug.trap("Unexpected migration state") };
 
     // make any manipulations with previous state to convert it to current migration state type
-    let teachers = Array.map(prevState.teachers, func (item: Types001.Teacher): Types002.Teacher {
+    let teachers = Array.map(state.teachers, func (item: V0_1_0.Teacher): V0_2_0.Teacher {
       return {
         firstName = item.firstName;
         lastName = item.lastName;
@@ -18,7 +19,7 @@ module {
       };
     });
 
-    let students = Array.map(prevState.students, func (item: Types001.Student): Types002.Student {
+    let students = Array.map(state.students, func (item: V0_1_0.Student): V0_2_0.Student {
       return {
         firstName = item.firstName;
         lastName = item.lastName;
@@ -28,8 +29,8 @@ module {
     });
 
     // return current state
-    return #state002(#data({
-      var admin = prevState.admin;
+    return #v0_2_0(#data({
+      var admin = state.admin;
       var teachers;
       var students;
     }));
@@ -39,10 +40,10 @@ module {
 
   public func downgrade(migrationState: MigrationTypes.State, args: MigrationTypes.Args): MigrationTypes.State {
     // access current state
-    let #state002(#data(state)) = migrationState;
+    let state = switch (migrationState) { case (#v0_2_0(#data(state))) state; case (_) Debug.trap("Unexpected migration state") };
 
     // make any manipulations with current state to convert it to previous migration state type
-    let teachers = Array.map(state.teachers, func (item: Types002.Teacher): Types001.Teacher {
+    let teachers = Array.map(state.teachers, func (item: V0_2_0.Teacher): V0_1_0.Teacher {
       return {
         firstName = item.firstName;
         lastName = item.lastName;
@@ -50,7 +51,7 @@ module {
       };
     });
 
-    let students = Array.map(state.students, func (item: Types002.Student): Types001.Student {
+    let students = Array.map(state.students, func (item: V0_2_0.Student): V0_1_0.Student {
       return {
         firstName = item.firstName;
         lastName = item.lastName;
@@ -59,13 +60,13 @@ module {
     });
 
     // return previous state
-    return #state001(#data({
+    return #v0_1_0(#data({
       var admin = state.admin;
       var teachers;
       var students;
     }));
 
-    // if you are sure you wont need downgrades in your project, you can just "return #state000(#data);"
+    // if you are sure you wont need downgrades in your project, you can just "return #v0_0_0(#data);"
     // note that it will fail to deploy if you then try to downgrade
   };
 };

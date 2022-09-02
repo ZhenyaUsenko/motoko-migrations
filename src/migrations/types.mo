@@ -1,5 +1,5 @@
-import Migration001 "./001-initial/types";
-import Migration002 "./002-add-full-name/types";
+import Migration001 "./00-01-00-initial/types";
+import Migration002 "./00-02-00-add-full-name/types";
 
 module {
   // do not forget to change current migration when you add a new one
@@ -13,9 +13,9 @@ module {
   };
 
   public type State = {
-    #state000: { #id; #data: () };
-    #state001: { #id; #data: Migration001.State };
-    #state002: { #id; #data: Migration002.State };
+    #v0_0_0: { #id; #data: () };
+    #v0_1_0: { #id; #data: Migration001.State };
+    #v0_2_0: { #id; #data: Migration002.State };
     // do not forget to add your new migration state types here
   };
 };

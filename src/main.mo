@@ -1,21 +1,22 @@
 import Array "mo:base/Array";
-import Types "./types";
-import Migrations "./migrations";
+import Debug "mo:base/Debug";
 import MigrationTypes "./migrations/types";
+import Migrations "./migrations";
+import Types "./types";
 
-shared deployer actor class MotokoMigrations() {
+shared ({ caller = deployer }) actor class MotokoMigrations() {
   let StateTypes = MigrationTypes.Current;
 
   // you will have only one stable variable
   // move all your stable variable declarations to "migrations/001-initial/types.mo -> State"
-  stable var migrationState: MigrationTypes.State = #state000(#data);
+  stable var migrationState: MigrationTypes.State = #v0_0_0(#data);
 
-  // do not forget to change #state002 when you are adding a new migration
-  // if you use one previus states in place of #state002 it will run downgrade methods instead
-  migrationState := Migrations.migrate(migrationState, #state002(#id), { deployer = deployer.caller });
+  // do not forget to change #v0_2_0 when you are adding a new migration
+  // if you use one of previus states in place of #v0_2_0 it will run downgrade methods instead
+  migrationState := Migrations.migrate(migrationState, #v0_2_0(#id), { deployer });
 
-  // do not forget to change #state002 when you are adding a new migration
-  let #state002(#data(state)) = migrationState;
+  // do not forget to change #v0_2_0 when you are adding a new migration
+  let state = switch (migrationState) { case (#v0_2_0(#data(state))) state; case (_) Debug.trap("Unexpected migration state") };
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
